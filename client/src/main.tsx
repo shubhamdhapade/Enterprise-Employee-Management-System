@@ -5,13 +5,17 @@ import AppRouter from './app/router/AppRouter'
 import { ThemeProvider } from '@mui/material/styles'
 import theme from './styles/theme/theme'
 import CssBaseline from '@mui/material/CssBaseline'
+import { Provider } from 'react-redux'
+import { store } from './app/store'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ThemeProvider theme={theme}>
-      <CssBaseline>
-        <AppRouter />
-      </CssBaseline>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline>
+          <AppRouter />
+        </CssBaseline>
+      </ThemeProvider>
+    </Provider>
   </StrictMode>,
 )
