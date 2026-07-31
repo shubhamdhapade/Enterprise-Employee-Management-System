@@ -1,33 +1,18 @@
 /**
- * Login form values.
- * Used by React Hook Form and Zod.
+ * -----------------------------------------------------------------------------
+ * File: auth.types.ts
+ * Feature: Authentication
+ * Ticket: EEMS-30
+ * Description:
+ * Shared TypeScript models for authentication.
+ * -----------------------------------------------------------------------------
  */
-export interface LoginFormData {
-  email: string;
-  password: string;
-}
 
-/**
- * Authentication API request.
- */
 export interface LoginRequest {
   email: string;
   password: string;
 }
 
-/**
- * Authentication API response.
- */
-export interface LoginResponse {
-  accessToken: string;
-  refreshToken?: string;
-  expiresIn?: number;
-  user: AuthUser;
-}
-
-/**
- * Authenticated user model.
- */
 export interface AuthUser {
   id: number;
   employeeId: string;
@@ -36,18 +21,16 @@ export interface AuthUser {
   email: string;
   role: string;
   department: string;
-  avatar?: string;
+  avatar: string;
   isActive: boolean;
 }
 
-/**
- * Authentication state.
- * Will be used in Redux Toolkit.
- */
-export interface AuthState {
-  user: AuthUser | null;
-  accessToken: string | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  error: string | null;
+export interface LoginResponse {
+  user: AuthUser;
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface LoginErrorResponse {
+  message: string;
 }
