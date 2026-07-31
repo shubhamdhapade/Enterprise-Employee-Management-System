@@ -1,3 +1,10 @@
+/**
+ * Feature: Authentication
+ * Ticket: EEMS-29
+ * Description: Login form with React Hook Form and Zod validation.
+ */
+
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Box,
   Button,
@@ -8,10 +15,39 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useForm } from "react-hook-form";
+
+import {
+  loginSchema,
+  type LoginFormValues,
+} from "../schemas/loginSchema";
 
 const LoginForm = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    mode: "onBlur",
+  });
+
+  const onSubmit = async (data: LoginFormValues) => {
+    console.log("Login Form Data", data);
+
+    // API integration will be implemented in EEMS-30
+  };
+
   return (
-    <Box component="form" noValidate>
+    <Box
+      component="form"
+      noValidate
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <Stack spacing={3}>
         <Box>
           <Typography
@@ -33,17 +69,23 @@ const LoginForm = () => {
         </Box>
 
         <TextField
-          fullWidth
           label="Email Address"
+          fullWidth
           type="email"
           placeholder="john.doe@company.com"
+          error={!!errors.email}
+          helperText={errors.email?.message}
+          {...register("email")}
         />
 
         <TextField
-          fullWidth
           label="Password"
+          fullWidth
           type="password"
           placeholder="Enter your password"
+          error={!!errors.password}
+          helperText={errors.password?.message}
+          {...register("password")}
         />
 
         <Box
@@ -69,15 +111,16 @@ const LoginForm = () => {
         </Box>
 
         <Button
+          type="submit"
           variant="contained"
-          size="large"
           fullWidth
+          size="large"
+          disabled={isSubmitting}
           sx={{
             py: 1.5,
             borderRadius: 2,
-            textTransform: "none",
             fontWeight: 600,
-            fontSize: "1rem",
+            textTransform: "none",
           }}
         >
           Sign In
