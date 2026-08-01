@@ -1,5 +1,21 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": 1,
+      "employeeId": "EMP001",
+      "firstName": "Shubham",
+      "lastName": "Dhapade",
+      "email": "admin@eems.com",
+      "password": "Admin@123",
+      "role": "Admin",
+      "department": "Engineering",
+      "avatar": "",
+      "isActive": true,
+      "accessToken": "mock-access-token",
+      "refreshToken": "mock-refresh-token"
+    }
+  ],
+
   "employees": [],
   "departments": [],
   "attendance": [],

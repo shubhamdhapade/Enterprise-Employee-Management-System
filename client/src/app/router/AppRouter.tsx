@@ -1,7 +1,7 @@
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 
-import LoginPage from "../../pages/auth/LoginPage";
-import DashboardPage from "../../pages/dashboard/DashboardPage";
+import LoginPage from "@/features/auth/pages/LoginPage";
+import DashboardPage from "@/pages/dashboard/DashboardPage.tsx";
 
 const AppRouter = () => {
   return (
