@@ -2,31 +2,31 @@
  * -----------------------------------------------------------------------------
  * Feature : Routing
  * Ticket  : EEMS-32
- * File    : ProtectedRoute.tsx
+ * File    : PublicRoute.tsx
  * Description:
- * Prevents unauthenticated users from accessing protected routes.
+ * Prevents authenticated users from accessing public routes.
  * -----------------------------------------------------------------------------
  */
 
 import type { ReactElement } from "react";
 import { Navigate } from "react-router-dom";
 
-import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useAuth } from "../../features/auth/hooks/useAuth";
 
-interface ProtectedRouteProps {
+interface PublicRouteProps {
   children: ReactElement;
 }
 
-const ProtectedRoute = ({
+const PublicRoute = ({
   children,
-}: ProtectedRouteProps): ReactElement => {
+}: PublicRouteProps): ReactElement => {
   const { isAuthenticated } = useAuth();
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
   }
 
   return children;
 };
 
-export default ProtectedRoute;
+export default PublicRoute;
