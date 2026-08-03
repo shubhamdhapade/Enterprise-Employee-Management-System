@@ -1,6 +1,6 @@
 /**
  * -----------------------------------------------------------------------------
- * Feature : Dashboard Navigation
+ * Feature : Dashboard
  * Ticket  : EEMS-34
  * File    : NavigationItem.tsx
  * Description:
@@ -12,7 +12,6 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Tooltip,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -29,53 +28,40 @@ const NavigationItem = ({
   collapsed,
   onClick,
 }: NavigationItemProps) => {
-  const navigate = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = location.pathname === item.path;
 
-  const handleClick = () => {
-    if (item.disabled) {
-      return;
-    }
+  const Icon = item.icon;
 
+  const handleClick = () => {
     navigate(item.path);
 
-    onClick?.();
+    if (onClick) {
+      onClick();
+    }
   };
 
-  const button = (
+  return (
     <ListItemButton
       selected={isActive}
       onClick={handleClick}
-      disabled={item.disabled}
       sx={{
         borderRadius: 2,
-        mb: 0.5,
         mx: 1,
-
-        "&.Mui-selected": {
-          backgroundColor: "primary.main",
-          color: "primary.contrastText",
-
-          "& .MuiListItemIcon-root": {
-            color: "inherit",
-          },
-        },
-
-        "&:hover": {
-          borderRadius: 2,
-        },
+        mb: 0.5,
       }}
     >
       <ListItemIcon
         sx={{
-          minWidth: collapsed ? 0 : 40,
-          justifyContent: "center",
-          color: isActive ? "inherit" : "text.primary",
+          minWidth: 40,
+          color: isActive
+            ? "primary.main"
+            : "text.secondary",
         }}
       >
-        {item.icon}
+        <Icon />
       </ListItemIcon>
 
       {!collapsed && (
@@ -93,19 +79,6 @@ const NavigationItem = ({
       )}
     </ListItemButton>
   );
-
-  if (collapsed) {
-    return (
-      <Tooltip
-        title={item.label}
-        placement="right"
-      >
-        {button}
-      </Tooltip>
-    );
-  }
-
-  return button;
 };
 
 export default NavigationItem;

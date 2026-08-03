@@ -8,8 +8,7 @@
  * -----------------------------------------------------------------------------
  */
 
-import type { ReactNode } from "react";
-
+import type { SvgIconComponent } from "@mui/icons-material";
 export interface NavigationItem {
   /**
    * Unique identifier.
@@ -29,7 +28,7 @@ export interface NavigationItem {
   /**
    * Material UI icon.
    */
-  icon: ReactNode;
+  icon: SvgIconComponent;
 
   /**
    * Child navigation items.

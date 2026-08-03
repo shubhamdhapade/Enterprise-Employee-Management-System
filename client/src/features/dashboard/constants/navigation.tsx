@@ -1,22 +1,22 @@
 /**
  * -----------------------------------------------------------------------------
- * Feature : Dashboard Navigation
+ * Feature : Dashboard
  * Ticket  : EEMS-34
- * File    : navigation.ts
+ * File    : navigation.tsx
  * Description:
- * Centralized sidebar navigation configuration.
+ * Dashboard navigation configuration.
  * -----------------------------------------------------------------------------
  */
 
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import PeopleIcon from "@mui/icons-material/People";
-import ApartmentIcon from "@mui/icons-material/Apartment";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-import PaymentsIcon from "@mui/icons-material/Payments";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import ApartmentIcon from "@mui/icons-material/Apartment";
 import BadgeIcon from "@mui/icons-material/Badge";
-import SecurityIcon from "@mui/icons-material/Security";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import LogoutIcon from "@mui/icons-material/Logout";
+import PaymentsIcon from "@mui/icons-material/Payments";
+import PeopleIcon from "@mui/icons-material/People";
+import SecurityIcon from "@mui/icons-material/Security";
 
 import type { NavigationItem } from "../types/navigation.types";
 
@@ -25,49 +25,49 @@ export const navigationItems: NavigationItem[] = [
     id: "dashboard",
     label: "Dashboard",
     path: "/dashboard",
-    icon: <DashboardIcon />,
+    icon: DashboardIcon,
   },
   {
     id: "employees",
     label: "Employees",
     path: "/employees",
-    icon: <PeopleIcon />,
+    icon: PeopleIcon,
   },
   {
     id: "departments",
     label: "Departments",
     path: "/departments",
-    icon: <ApartmentIcon />,
+    icon: ApartmentIcon,
   },
   {
     id: "attendance",
     label: "Attendance",
     path: "/attendance",
-    icon: <EventAvailableIcon />,
+    icon: EventAvailableIcon,
   },
   {
     id: "payroll",
     label: "Payroll",
     path: "/payroll",
-    icon: <PaymentsIcon />,
+    icon: PaymentsIcon,
   },
   {
     id: "administration",
     label: "Administration",
-    path: "/administration",
-    icon: <AdminPanelSettingsIcon />,
+    path: "#",
+    icon: AdminPanelSettingsIcon,
     children: [
       {
         id: "users",
         label: "Users",
         path: "/administration/users",
-        icon: <BadgeIcon />,
+        icon: BadgeIcon,
       },
       {
         id: "roles",
         label: "Roles",
         path: "/administration/roles",
-        icon: <SecurityIcon />,
+        icon: SecurityIcon,
       },
     ],
   },
@@ -75,6 +75,6 @@ export const navigationItems: NavigationItem[] = [
     id: "logout",
     label: "Logout",
     path: "/logout",
-    icon: <LogoutIcon />,
+    icon: LogoutIcon,
   },
 ];

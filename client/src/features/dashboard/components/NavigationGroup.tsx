@@ -1,23 +1,22 @@
 /**
  * -----------------------------------------------------------------------------
- * Feature : Dashboard Navigation
+ * Feature : Dashboard
  * Ticket  : EEMS-34
  * File    : NavigationGroup.tsx
  * Description:
- * Reusable navigation group supporting nested menu items.
+ * Reusable expandable navigation group.
  * -----------------------------------------------------------------------------
  */
 
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Collapse,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Tooltip,
 } from "@mui/material";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import NavigationItem from "./NavigationItem";
 
@@ -27,7 +26,7 @@ interface NavigationGroupProps {
   item: NavigationItemType;
   collapsed: boolean;
   expanded: boolean;
-  onToggle: (id: string) => void;
+  onToggle: () => void;
   onItemClick?: () => void;
 }
 
@@ -38,60 +37,49 @@ const NavigationGroup = ({
   onToggle,
   onItemClick,
 }: NavigationGroupProps) => {
-  const groupButton = (
-    <ListItemButton
-      onClick={() => onToggle(item.id)}
-      sx={{
-        borderRadius: 2,
-        mb: 0.5,
-        mx: 1,
-      }}
-    >
-      <ListItemIcon
-        sx={{
-          minWidth: collapsed ? 0 : 40,
-          justifyContent: "center",
-        }}
-      >
-        {item.icon}
-      </ListItemIcon>
-
-      {!collapsed && (
-        <>
-          <ListItemText
-            primary={item.label}
-            slotProps={{
-              primary: {
-                sx: {
-                  fontSize: 14,
-                  fontWeight: 500,
-                },
-              },
-            }}
-          />
-
-          {expanded ? (
-            <ExpandLessIcon />
-          ) : (
-            <ExpandMoreIcon />
-          )}
-        </>
-      )}
-    </ListItemButton>
-  );
+  const Icon = item.icon;
 
   return (
     <>
-      {collapsed ? (
-        <Tooltip
-          title={item.label}
-          placement="right"
+      <ListItemButton
+        onClick={onToggle}
+        sx={{
+          borderRadius: 2,
+          mx: 1,
+          mb: 0.5,
+        }}
+      >
+        <ListItemIcon
+          sx={{
+            minWidth: 40,
+            color: "text.secondary",
+          }}
         >
-          {groupButton}
-        </Tooltip>
-      ) : (
-        groupButton
-      )}
+          <Icon />
+        </ListItemIcon>
+
+        {!collapsed && (
+          <>
+            <ListItemText
+              primary={item.label}
+              slotProps={{
+                primary: {
+                  sx: {
+                    fontSize: 14,
+                    fontWeight: 500,
+                  },
+                },
+              }}
+            />
+
+            {expanded ? (
+              <ExpandLessIcon />
+            ) : (
+              <ExpandMoreIcon />
+            )}
+          </>
+        )}
+      </ListItemButton>
 
       {!collapsed && (
         <Collapse
