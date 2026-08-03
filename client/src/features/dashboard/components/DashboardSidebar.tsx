@@ -56,11 +56,10 @@ const DashboardSidebar = ({
           {navigationItems.map((item) =>
             item.children ? (
               <NavigationGroup
-                key={item.id}
                 item={item}
                 collapsed={collapsed}
-                expanded={!!expandedMenus[item.id]}
-                onToggle={toggleMenu}
+                expanded={expandedMenus[item.id] ?? false}
+                onToggle={() => toggleMenu(item.id)}
                 onItemClick={closeMobileDrawer}
               />
             ) : (
