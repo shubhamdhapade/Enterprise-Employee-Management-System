@@ -15,7 +15,7 @@ import {
   Routes,
 } from "react-router-dom";
 
-import DashboardPage from "@/pages/dashboard/DashboardPage";
+import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 import LoginPage from "@/features/auth/pages/LoginPage";
 import UnauthorizedPage from "@/pages/common/UnauthorizedPage";
 
