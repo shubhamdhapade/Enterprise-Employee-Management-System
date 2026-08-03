@@ -1,14 +1,14 @@
 /**
  * -----------------------------------------------------------------------------
  * Feature : Dashboard
+ * Ticket  : EEMS-34
  * File    : DashboardHeader.tsx
  * Description:
- * Reusable application header for authenticated pages.
+ * Responsive dashboard header with sidebar controls.
  * -----------------------------------------------------------------------------
  */
 
 import MenuIcon from "@mui/icons-material/Menu";
-
 import {
   AppBar,
   Box,
@@ -16,39 +16,43 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import { useLocation } from "react-router-dom";
 
-const DRAWER_WIDTH = 260;
+import { navigationItems } from "../constants/navigation";
+import useNavigation from "../hooks/useNavigation";
 
-interface DashboardHeaderProps {
-  onMenuClick: () => void;
-}
+const DashboardHeader = () => {
+  const {
+    toggleSidebar,
+    toggleMobileDrawer,
+  } = useNavigation();
 
-const DashboardHeader = ({
-  onMenuClick,
-}: DashboardHeaderProps) => {
+  const location = useLocation();
+
+  const currentPage =
+    navigationItems.find(
+      (item) => item.path === location.pathname,
+    )?.label ?? "Dashboard";
+
   return (
     <AppBar
       position="fixed"
       color="inherit"
       elevation={1}
       sx={{
-        width: {
-          lg: `calc(100% - ${DRAWER_WIDTH}px)`,
-        },
-        ml: {
-          lg: `${DRAWER_WIDTH}px`,
-        },
+        zIndex: (theme) => theme.zIndex.drawer + 1,
       }}
     >
       <Toolbar>
-        {/* Mobile Menu */}
+        {/* Desktop Collapse */}
         <IconButton
-          color="inherit"
           edge="start"
-          onClick={onMenuClick}
+          color="inherit"
+          onClick={toggleSidebar}
           sx={{
             display: {
-              lg: "none",
+              xs: "none",
+              md: "flex",
             },
             mr: 2,
           }}
@@ -56,36 +60,65 @@ const DashboardHeader = ({
           <MenuIcon />
         </IconButton>
 
-        {/* Page Title */}
-        <Typography
+        {/* Mobile Drawer */}
+        <IconButton
+          edge="start"
+          color="inherit"
+          onClick={toggleMobileDrawer}
           sx={{
             display: {
-              xs: "none",
-              md: "block",
-            },
-            fontWeight: 700,
-          }}
-        >
-          Enterprise Employee Management System
-        </Typography>
-
-        <Typography
-          sx={{
-            display: {
-              xs: "block",
+              xs: "flex",
               md: "none",
             },
-             fontWeight: 700,
+            mr: 2,
           }}
         >
-          EEMS
-        </Typography>
+          <MenuIcon />
+        </IconButton>
 
-        {/* Current Module */}
-        <Box>
-          <Typography variant="body1"
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
+          {/* Left */}
+          <Typography
+            variant="h6"
+            sx={{
+              display: {
+                xs: "none",
+                md: "block",
+                fontWeight: 700,
+              },
+            }}
           >
-            Dashboard
+            Enterprise Employee Management System
+          </Typography>
+
+          <Typography
+            variant="h6"
+            sx={{
+              display: {
+                xs: "block",
+                md: "none",
+                fontWeight: 700,
+              },
+            }}
+          >
+            EEMS
+          </Typography>
+
+          {/* Right */}
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 600,
+            }}
+          >
+            {currentPage}
           </Typography>
         </Box>
       </Toolbar>

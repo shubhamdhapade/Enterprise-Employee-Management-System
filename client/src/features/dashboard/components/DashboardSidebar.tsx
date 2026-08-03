@@ -1,9 +1,10 @@
 /**
  * -----------------------------------------------------------------------------
  * Feature : Dashboard
+ * Ticket  : EEMS-34
  * File    : DashboardSidebar.tsx
  * Description:
- * Responsive sidebar navigation.
+ * Responsive sidebar with nested navigation.
  * -----------------------------------------------------------------------------
  */
 
@@ -12,155 +13,83 @@ import {
   Divider,
   Drawer,
   List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Toolbar,
-  Typography,
 } from "@mui/material";
 
-import { NavLink } from "react-router-dom";
+import NavigationItem from "./NavigationItem";
+import NavigationGroup from "./NavigationGroup";
 
-import {
-  navigationItems,
-  logoutItem,
-} from "../constants/navigation";
+import { navigationItems } from "../constants/navigation";
+import useNavigation from "../hooks/useNavigation";
 
-const DRAWER_WIDTH = 260;
+const DRAWER_WIDTH = 240;
 
 interface DashboardSidebarProps {
-  mobileOpen: boolean;
-  onClose: () => void;
+  mobile?: boolean;
 }
 
 const DashboardSidebar = ({
-  mobileOpen,
-  onClose,
+  mobile = false,
 }: DashboardSidebarProps) => {
-  const drawerContent = (
+  const {
+    collapsed,
+    mobileOpen,
+    expandedMenus,
+    closeMobileDrawer,
+    toggleMenu,
+  } = useNavigation();
+
+  const sidebarContent = (
     <>
-      <Toolbar>
-        <Typography
-          variant="h5"
-          sx={{
-            fontWeight: 700,
-          }}
-        >
-          EEMS
-        </Typography>
-      </Toolbar>
+      <Toolbar />
 
       <Divider />
 
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
+          overflowY: "auto",
+          flexGrow: 1,
+          py: 1,
         }}
       >
-        {/* Main Navigation */}
-        <List sx={{ flexGrow: 1 }}>
-          {navigationItems.map((item) => {
-            const Icon = item.icon;
-
-            return (
-              <ListItem
-                key={item.path}
-                disablePadding
-              >
-                <ListItemButton
-                  component={NavLink}
-                  to={item.path}
-                  onClick={onClose}
-                  sx={{
-                    "&.active": {
-                      backgroundColor: "primary.main",
-                      color: "primary.contrastText",
-
-                      "& .MuiListItemIcon-root": {
-                        color: "primary.contrastText",
-                      },
-                    },
-                  }}
-                >
-                  <ListItemIcon>
-                    <Icon />
-                  </ListItemIcon>
-
-                  <ListItemText primary={item.label} />
-                </ListItemButton>
-              </ListItem>
-            );
-          })}
-        </List>
-
-        <Divider />
-
-        {/* Logout */}
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton
-              component={NavLink}
-              to={logoutItem.path}
-            >
-              <ListItemIcon>
-                <logoutItem.icon />
-              </ListItemIcon>
-
-              <ListItemText
-                primary={logoutItem.label}
+        <List disablePadding>
+          {navigationItems.map((item) =>
+            item.children ? (
+              <NavigationGroup
+                key={item.id}
+                item={item}
+                collapsed={collapsed}
+                expanded={!!expandedMenus[item.id]}
+                onToggle={toggleMenu}
+                onItemClick={closeMobileDrawer}
               />
-            </ListItemButton>
-          </ListItem>
+            ) : (
+              <NavigationItem
+                key={item.id}
+                item={item}
+                collapsed={collapsed}
+                onClick={closeMobileDrawer}
+              />
+            ),
+          )}
         </List>
       </Box>
     </>
   );
 
-  return (
-    <Box
-      component="nav"
-      sx={{
-        width: {
-          lg: DRAWER_WIDTH,
-        },
-        flexShrink: {
-          lg: 0,
-        },
-      }}
-    >
-      {/* Desktop */}
-      <Drawer
-        variant="permanent"
-        open
-        sx={{
-          display: {
-            xs: "none",
-            lg: "block",
-          },
-          "& .MuiDrawer-paper": {
-            width: DRAWER_WIDTH,
-            boxSizing: "border-box",
-          },
-        }}
-      >
-        {drawerContent}
-      </Drawer>
-
-      {/* Mobile */}
+  if (mobile) {
+    return (
       <Drawer
         variant="temporary"
         open={mobileOpen}
-        onClose={onClose}
+        onClose={closeMobileDrawer}
         ModalProps={{
           keepMounted: true,
         }}
         sx={{
           display: {
             xs: "block",
-            lg: "none",
+            md: "none",
           },
           "& .MuiDrawer-paper": {
             width: DRAWER_WIDTH,
@@ -168,9 +97,32 @@ const DashboardSidebar = ({
           },
         }}
       >
-        {drawerContent}
+        {sidebarContent}
       </Drawer>
-    </Box>
+    );
+  }
+
+  return (
+    <Drawer
+      variant="permanent"
+      sx={{
+        display: {
+          xs: "none",
+          md: "block",
+        },
+        width: collapsed ? 72 : DRAWER_WIDTH,
+        flexShrink: 0,
+
+        "& .MuiDrawer-paper": {
+          width: collapsed ? 72 : DRAWER_WIDTH,
+          boxSizing: "border-box",
+          transition: "width .25s ease",
+        },
+      }}
+      open
+    >
+      {sidebarContent}
+    </Drawer>
   );
 };
 
