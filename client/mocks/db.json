@@ -3,44 +3,23 @@
     {
       "id": 1,
       "employeeId": "EMP001",
-      "firstName": "Admin",
-      "lastName": "User",
+      "firstName": "Shubham",
+      "lastName": "Dhapade",
       "email": "admin@eems.com",
       "password": "Admin@123",
-      "role": "Super Admin",
-      "department": "Administration",
-      "avatar": "",
-      "isActive": true,
-      "accessToken": "mock-access-token-admin",
-      "refreshToken": "mock-refresh-token-admin"
-    },
-    {
-      "id": 2,
-      "employeeId": "EMP002",
-      "firstName": "John",
-      "lastName": "Doe",
-      "email": "john.doe@eems.com",
-      "password": "John@123",
-      "role": "HR Manager",
-      "department": "Human Resources",
-      "avatar": "",
-      "isActive": true,
-      "accessToken": "mock-access-token-john",
-      "refreshToken": "mock-refresh-token-john"
-    },
-    {
-      "id": 3,
-      "employeeId": "EMP003",
-      "firstName": "Sarah",
-      "lastName": "Wilson",
-      "email": "sarah.wilson@eems.com",
-      "password": "Sarah@123",
-      "role": "Employee",
+      "role": "Admin",
       "department": "Engineering",
       "avatar": "",
       "isActive": true,
-      "accessToken": "mock-access-token-sarah",
-      "refreshToken": "mock-refresh-token-sarah"
+      "accessToken": "mock-access-token",
+      "refreshToken": "mock-refresh-token"
     }
-  ]
+  ],
+
+  "employees": [],
+  "departments": [],
+  "attendance": [],
+  "leaveRequests": [],
+  "payroll": [],
+  "notifications": []
 }

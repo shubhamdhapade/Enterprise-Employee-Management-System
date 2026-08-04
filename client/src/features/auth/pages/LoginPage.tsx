@@ -1,5 +1,39 @@
+import { Box } from "@mui/material";
+
+import AuthLayout from "../layouts/AuthLayout";
+
+import BrandSection from "../components/BrandSection";
+import LoginCard from "../components/LoginCard";
+import LoginForm from "../components/LoginForm";
+
 const LoginPage = () => {
-  return <h1>Login Page</h1>;
+  return (
+    <AuthLayout>
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 6,
+        }}
+      >
+        <BrandSection />
+
+        <Box
+          sx={{
+            flex: 1,
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <LoginCard>
+            <LoginForm />
+          </LoginCard>
+        </Box>
+      </Box>
+    </AuthLayout>
+  );
 };
 
 export default LoginPage;

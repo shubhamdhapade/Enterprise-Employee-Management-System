@@ -22,7 +22,16 @@ import {
   type LoginFormValues,
 } from "../schemas/loginSchema";
 
+import { useNavigate } from "react-router-dom";
+
+import { useAppDispatch, useAuth } from "../hooks/useAuth";
+import { loginThunk } from "../store/authThunk";
+
 const LoginForm = () => {
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { isLoading, error } = useAuth();
   const {
     register,
     handleSubmit,
@@ -37,9 +46,15 @@ const LoginForm = () => {
   });
 
   const onSubmit = async (data: LoginFormValues) => {
-    console.log("Login Form Data", data);
+    try {
+      const resultAction = await dispatch(loginThunk(data));
 
-    // API integration will be implemented in EEMS-30
+      if (loginThunk.fulfilled.match(resultAction)) {
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      console.error("Login failed", error);
+    }
   };
 
   return (
@@ -110,12 +125,18 @@ const LoginForm = () => {
           </Link>
         </Box>
 
+        {error && (
+          <Typography color="error" variant="body2">
+            {error}
+          </Typography>
+        )}
+
         <Button
           type="submit"
           variant="contained"
           fullWidth
           size="large"
-          disabled={isSubmitting}
+          disabled={isSubmitting || isLoading}
           sx={{
             py: 1.5,
             borderRadius: 2,
@@ -123,7 +144,7 @@ const LoginForm = () => {
             textTransform: "none",
           }}
         >
-          Sign In
+          {isLoading ? "Signing In..." : "Sign In"}
         </Button>
       </Stack>
     </Box>

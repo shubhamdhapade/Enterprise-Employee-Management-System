@@ -1,39 +1,29 @@
 /**
  * -----------------------------------------------------------------------------
- * File: authService.ts
- * Feature: Authentication
- * Ticket: EEMS-30
- * Description:
- * Handles all authentication-related API communication.
+ * Feature : Authentication
+ * Ticket  : EEMS-30 / EEMS-31
+ * File    : authService.ts
  * -----------------------------------------------------------------------------
  */
 
-import axiosClient from '../../../services/api/axiosClient';
-import { API_ENDPOINTS } from "../../../services/api/endpoint";
+import { authApi } from "../api/authApi";
 
 import type {
-    LoginRequest,
-    LoginResponse,
-} from '../types/auth.types';
+  LoginRequest,
+  LoginResponse,
+} from "../types/auth.types";
 
 class AuthService {
-    /**
-     * Authenticate user.
-    */
-    async login(payload: LoginRequest): Promise<LoginResponse> {
-        const response = await axiosClient.post<LoginResponse>(
-            API_ENDPOINTS.AUTH.LOGIN,
-            payload
-        );
-        return response.data;
-    }
-    /**
-     * Logout user.
-     */
-    async logout(): Promise<void> {
-        await axiosClient.post(API_ENDPOINTS.AUTH.LOGOUT);
-    }
+  async login(payload: LoginRequest): Promise<LoginResponse> {
+    const response = await authApi.login(payload);
+    return response.data;
+  }
+
+  async logout(): Promise<void> {
+    await authApi.logout();
+  }
 }
 
 const authService = new AuthService();
+
 export default authService;

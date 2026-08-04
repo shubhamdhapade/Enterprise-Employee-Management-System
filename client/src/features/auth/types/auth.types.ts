@@ -1,10 +1,10 @@
 /**
  * -----------------------------------------------------------------------------
- * File: auth.types.ts
- * Feature: Authentication
- * Ticket: EEMS-30
- * Description:
- * Shared TypeScript models for authentication.
+ * Feature : Authentication
+ * Ticket  : EEMS-31
+ * File    : auth.types.ts
+ * -----------------------------------------------------------------------------
+ * Shared authentication models.
  * -----------------------------------------------------------------------------
  */
 
@@ -22,6 +22,7 @@ export interface AuthUser {
   role: string;
   department: string;
   avatar: string;
+  avatar: string;
   isActive: boolean;
 }
 
@@ -31,6 +32,22 @@ export interface LoginResponse {
   refreshToken: string;
 }
 
-export interface LoginErrorResponse {
+/**
+ * Generic API error response.
+ */
+export interface ApiErrorResponse {
   message: string;
+}
+
+/**
+ * Authentication state.
+ * Will be used by Context/Redux.
+ */
+export interface AuthState {
+  user: AuthUser | null;
+  accessToken: string | null;
+  refreshToken: string | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  error: string | null;
 }
