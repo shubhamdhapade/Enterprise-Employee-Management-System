@@ -1,453 +1,269 @@
-# Enterprise Employee Management System (EEMS)
+# Architecture Overview
 
-# Project Architecture
+## Introduction
 
-Version: 1.0
+The Enterprise Employee Management System (EEMS) follows a modern feature-based architecture designed for scalability, maintainability, and enterprise-level development practices.
 
----
-
-# Purpose
-
-This document defines the project architecture, folder structure,
-coding standards, and development guidelines.
-
-All future development must follow this document.
+The application separates business features into independent modules while sharing common layouts, routing, services, and application configuration.
 
 ---
 
-# Tech Stack
+# High-Level Architecture
 
-Frontend
-- React 19
-- TypeScript
-- Vite
-
-UI
-- Material UI
-- Tailwind CSS
-
-State Management
-- Redux Toolkit
-
-API
-- Axios
-
-Validation
-- React Hook Form
-- Zod
-
-Mock API
-- JSON Server
-
-Code Quality
-- ESLint
-- Prettier
-- Husky
-- lint-staged
-
----
-
-# Folder Structure
-
-src/
-
-    app/
-    assets/
-    components/
-    config/
-    constants/
-
-    features/
-
-    hooks/
-    layouts/
-    mocks/
-    pages/
-
-    services/
-
-    styles/
-    types/
-    utils/
+```
+Client (React + TypeScript)
+        │
+        ▼
+Application Layer
+        │
+ ├── Routing
+ ├── Authentication
+ ├── Redux Store
+ ├── Providers
+        │
+        ▼
+Feature Modules
+        │
+ ├── Auth
+ ├── Dashboard
+ ├── Employee
+ ├── Department
+ ├── Attendance
+ ├── Payroll
+        │
+        ▼
+API Services
+        │
+        ▼
+Backend API
+```
 
 ---
 
-# Shared Services
+# Project Structure
 
-src/services
-
-Contains application-wide reusable services.
-
-Example
-
-services/
-
-    api/
-        axiosClient.ts
-        endpoints.ts
-        interceptors.ts
-        index.ts
-
-    repository/
-
-    mock/
-
-    employeeService.ts
-    attendanceService.ts
-    payrollService.ts
-    departmentService.ts
-
----
-
-# Feature Structure
-
-Every feature must follow the same structure.
-
-Example
-
-features/auth
-
-    api/
-    components/
-    constants/
-    hooks/
-    layouts/
-    pages/
-
-    redux/
-
-    schemas/
-    services/
-    store/
-    types/
-    utils/
-
-    index.ts
-
-Future modules
-
-employees
-attendance
-departments
-dashboard
-payroll
-
-must follow exactly the same pattern.
+```text
+client/
+└── src/
+    ├── app/
+    │   ├── providers/
+    │   ├── router/
+    │   └── store/
+    │
+    ├── config/
+    │
+    ├── features/
+    │   ├── auth/
+    │   ├── dashboard/
+    │   ├── employee/
+    │   ├── department/
+    │   ├── attendance/
+    │   └── payroll/
+    │
+    ├── layouts/
+    ├── pages/
+    ├── services/
+    ├── styles/
+    └── lib/
+```
 
 ---
 
-# Layer Responsibilities
+# Feature-Based Architecture
 
-Component
+Each feature is self-contained.
 
-↓
+Example:
 
-Redux
+```text
+dashboard/
+│
+├── api/
+├── components/
+├── constants/
+├── hooks/
+├── layouts/
+├── pages/
+├── schemas/
+├── services/
+├── store/
+├── types/
+└── utils/
+```
 
-↓
+Benefits:
 
-Service
+- High cohesion
+- Low coupling
+- Easy scalability
+- Independent feature development
+- Better code ownership
 
-↓
+---
 
-API
+# Routing Architecture
 
-↓
+Routing is centralized inside:
 
-Axios Client
+```text
+src/app/router
+```
 
-↓
+Components:
 
-Backend
+- AppRouter
+- ProtectedRoute
+- PublicRoute
+
+Responsibilities:
+
+- Public routes
+- Protected routes
+- Unauthorized handling
+- Future role-based routing
+
+---
+
+# State Management
+
+Redux Toolkit is used for global application state.
+
+Current responsibilities:
+
+- Authentication
+- User session
+
+Future responsibilities:
+
+- Employee state
+- Attendance
+- Payroll
+- Departments
+- Notifications
+
+---
+
+# UI Architecture
+
+Material UI v7 is the primary UI framework.
+
+Guidelines:
+
+- Reusable components
+- Responsive layouts
+- Theme support
+- Accessibility
+- Consistent design system
+
+---
+
+# Dashboard Module
+
+Current dashboard includes:
+
+- Welcome card
+- Statistics cards
+- Recent activity
+- Analytics placeholder
+
+Future dashboard:
+
+- Charts
+- KPIs
+- Reports
+- Notifications
+- Live analytics
+
+---
+
+# Navigation
+
+Implemented features:
+
+- Responsive sidebar
+- Nested menus
+- Active route highlighting
+- Mobile drawer
+- Collapsible sidebar
+
+Future enhancements:
+
+- Breadcrumbs
+- Role-based navigation
+- Favorites
+- Search
+
+---
+
+# Authentication
+
+Current implementation:
+
+- Login page
+- Protected routes
+- Public routes
+
+Future implementation:
+
+- JWT authentication
+- Refresh tokens
+- RBAC
+- Permission-based routing
 
 ---
 
 # API Layer
 
-Responsible only for HTTP requests.
+Future API organization:
 
-Never contains business logic.
+```text
+services/
+│
+├── api/
+├── repository/
+└── mock/
+```
 
-Example
+Responsibilities:
 
-authApi.login()
-
-employeeApi.create()
-
-departmentApi.update()
-
----
-
-# Service Layer
-
-Responsible for
-
-Business logic
-
-Data transformation
-
-Calling multiple APIs
-
-Preparing data for Redux
-
-No UI code.
+- HTTP communication
+- Repository abstraction
+- Mock services
+- Error handling
 
 ---
 
-# Redux Layer
+# Design Principles
 
-Responsible only for application state.
+The project follows:
 
-No HTTP requests.
-
-HTTP requests must always be delegated to Services.
-
----
-
-# Shared Components
-
-Global reusable components belong in
-
-src/components
-
-Examples
-
-Button
-
-Input
-
-Loader
-
-Modal
-
-Table
-
-Dialog
+- SOLID Principles
+- DRY (Don't Repeat Yourself)
+- KISS (Keep It Simple)
+- Separation of Concerns
+- Feature-first architecture
+- Component reusability
 
 ---
 
-# Feature Components
+# Future Enhancements
 
-Components used only inside one feature belong inside
-
-features/<feature>/components
-
----
-
-# Pages
-
-Each feature owns its pages.
-
-Example
-
-features/auth/pages
-
-features/employees/pages
+- Employee Management
+- Department Module
+- Attendance Module
+- Payroll Module
+- Reports
+- Notifications
+- Charts
+- API Integration
+- Testing
+- Docker Deployment
+- CI/CD Pipeline
 
 ---
 
-# Types
+# Architecture Summary
 
-Feature-specific types
+The current architecture establishes a scalable foundation for enterprise application development.
 
-features/auth/types
-
-Shared types
-
-src/types
-
----
-
-# Hooks
-
-Reusable application hooks
-
-src/hooks
-
-Feature hooks
-
-features/auth/hooks
-
----
-
-# Constants
-
-Feature constants
-
-features/auth/constants
-
-Shared constants
-
-src/constants
-
----
-
-# Validation
-
-Every form must use
-
-React Hook Form
-
-+
-
-Zod
-
----
-
-# API Naming
-
-axiosClient
-
-API_ENDPOINTS
-
-authApi
-
-employeeApi
-
-departmentApi
-
-attendanceApi
-
----
-
-# Service Naming
-
-authService
-
-employeeService
-
-attendanceService
-
-departmentService
-
-payrollService
-
----
-
-# Redux Naming
-
-authSlice
-
-authThunk
-
-employeeSlice
-
-employeeThunk
-
----
-
-# Import Rules
-
-Always use relative imports inside features.
-
-Shared utilities should come from src.
-
-Never duplicate business logic.
-
----
-
-# Git Flow
-
-main
-
-↓
-
-develop
-
-↓
-
-feature/EMS-XXX-task-name
-
-↓
-
-Pull Request
-
-↓
-
-develop
-
-Release
-
-↓
-
-main
-
----
-
-# Commit Format
-
-EMS-028 feat(auth): create login UI
-
-EMS-031 feat(auth): integrate authentication
-
-EMS-040 feat(employee): employee CRUD
-
----
-
-# Pull Request
-
-Every PR must contain
-
-Summary
-
-Screenshots
-
-Testing
-
-Linked Issue
-
-Checklist
-
----
-
-# Branch Naming
-
-feature/EMS-028-login-ui
-
-feature/EMS-031-authentication
-
-feature/EMS-041-employee-crud
-
----
-
-# Coding Standards
-
-Use TypeScript strict mode.
-
-Never use any.
-
-Prefer interfaces for API contracts.
-
-Use readonly whenever possible.
-
-Always export through index.ts.
-
----
-
-# Future Modules
-
-Authentication
-
-Dashboard
-
-Employees
-
-Departments
-
-Attendance
-
-Payroll
-
-Leave
-
-Notifications
-
-Reports
-
-Settings
-
-Audit Logs
-
----
-
-This document is the official architecture reference for the Enterprise Employee Management System.
+The modular structure allows new business features to be added with minimal impact on existing modules while maintaining consistency, readability, and long-term maintainability.

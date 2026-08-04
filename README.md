@@ -155,57 +155,67 @@ feature/EMS-010-mock-backend
 - Husky
 - README
 
-### Sprint 1 – Authentication
+### Sprint 1 – Authentication & Dashboard Foundation
 
-- Login
-- JWT Authentication
-- Protected Routes
+    ### EEMS-32
+    - Authentication Routing
+    - Public Route
+    - Protected Route
+    - Unauthorized Page
+
+    ### EEMS-33
+    - Dashboard Layout
+    - Header
+    - Sidebar
+    - Footer
+    - Responsive Layout
+
+    ### EEMS-34
+    - Sidebar Navigation
+    - Nested Navigation
+    - Active Route Highlight
+    - Responsive Drawer
+
+    ### EEMS-35
+    - Dashboard Overview
+    - Welcome Card
+    - Statistics Cards
+    - Recent Activities
+    - Analytics Placeholder
 
 ### Sprint 2 – Dashboard
 
-- Dashboard UI
-- Statistics
-- Charts
+- Upcoming
 
-### Sprint 3 – Employee Management
+---
+
+## 🏗 Architecture
+
+The application follows a feature-based architecture.
+
+- Feature-first folder structure
+- Reusable UI components
+- Shared layouts
+- Centralized routing
+- Redux Toolkit state management
+- Modular dashboard architecture
+
+---
+
+## 📅 Roadmap
 
 - Employee CRUD
-- Search
-- Pagination
-- Filters
-
-### Sprint 4 – Department Management
-
-### Sprint 5 – Attendance
-
-### Sprint 6 – Leave Management
-
-### Sprint 7 – Payroll
-
-### Sprint 8 – Django REST API Integration
-
----
-
-## 🧪 Development Workflow
-
-1. Create GitHub Issue
-2. Assign Sprint
-3. Create Feature Branch
-4. Implement Feature
-5. Test
-6. Create Pull Request
-7. Merge into `develop`
-8. Close Issue
-
----
-
-## 📌 Current Status
-
-🚧 Under Active Development
-
-Frontend foundation is complete. Feature development begins in Sprint 1.
-
----
+- Department Management
+- Attendance Module
+- Leave Module
+- Payroll Module
+- Reports & Analytics
+- Notifications
+- Theme Switch
+- Role-Based Permissions
+- API Integration
+- Unit Testing
+- Docker Deployment
 
 ## 👨‍💻 Author
 
