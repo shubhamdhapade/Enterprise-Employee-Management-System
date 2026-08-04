@@ -22,6 +22,7 @@ export interface AuthUser {
   role: string;
   department: string;
   avatar: string;
+  avatar: string;
   isActive: boolean;
 }
 
