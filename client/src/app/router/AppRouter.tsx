@@ -18,6 +18,7 @@ import {
 import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 import LoginPage from "@/features/auth/pages/LoginPage";
 import UnauthorizedPage from "@/pages/common/UnauthorizedPage";
+import EmployeeListPage from "@/features/employee/pages/EmployeeListPage";
 
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
@@ -54,6 +55,16 @@ const AppRouter = () => {
             </ProtectedRoute>
           }
         />
+        
+        <Route
+          path="/employees"
+          element={
+            <ProtectedRoute>
+              <EmployeeListPage />
+            </ProtectedRoute>
+          }
+        />
+          
 
         {/* Unauthorized */}
         <Route

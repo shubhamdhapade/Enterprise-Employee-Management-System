@@ -7,12 +7,12 @@ const delay = (ms: number) =>
 class EmployeeService  {
     async getEmployees(): Promise<Employee[]>{
         await delay(300);
-        return [...employeeMock];
+        return employeeMock.map(employee => ({ ...employee }));
     }
 
-    async getEmployeebyId(id: string): Promise<Employee | undefined> {
+    async getEmployeeById(id: string): Promise<Employee | undefined> {
         await delay(300);
-        return Promise.resolve(employeeMock.find((employee) => employee.id === id));
+        return employeeMock.find((employee) => employee.id === id);
     }
 
     async createEmployee(employee: Employee): Promise<Employee> {
