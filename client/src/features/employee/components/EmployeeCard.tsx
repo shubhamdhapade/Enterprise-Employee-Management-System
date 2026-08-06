@@ -5,6 +5,7 @@ import {
   Typography,
   Divider,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 import type { Employee } from "../types/employee.types";
 import EmployeeAvatar from "./EmployeeAvatar";
@@ -15,8 +16,13 @@ interface EmployeeCardProps {
 }
 
 const EmployeeCard = ({ employee }: EmployeeCardProps) => {
+  const navigate = useNavigate();
+
   return (
-    <Card elevation={2}>
+    <Card 
+      elevation={2} 
+      onClick={() => navigate(`/employees/${employee.id}`)}
+    >
       <CardContent>
         <Stack spacing={2}>
           <Stack

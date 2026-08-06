@@ -22,6 +22,7 @@ import EmployeeListPage from "@/features/employee/pages/EmployeeListPage";
 
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
+import EmployeeDetailsPage from "@/features/employee/components/EmployeeDetailsPage";
 
 const AppRouter = () => {
   return (
@@ -55,7 +56,7 @@ const AppRouter = () => {
             </ProtectedRoute>
           }
         />
-        
+
         <Route
           path="/employees"
           element={
@@ -64,7 +65,14 @@ const AppRouter = () => {
             </ProtectedRoute>
           }
         />
-          
+        <Route
+          path="/employees/:id"
+          element={
+            <ProtectedRoute>
+              <EmployeeDetailsPage />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Unauthorized */}
         <Route
