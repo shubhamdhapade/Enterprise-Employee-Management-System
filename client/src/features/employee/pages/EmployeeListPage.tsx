@@ -1,7 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import {
+  Add,
+} from "@mui/icons-material";
 
 import {
   Box,
+  Button,
   Paper,
   Stack,
   Typography,
@@ -14,6 +20,8 @@ import { useEmployees } from "../hooks/useEmployees";
 import DashboardLayout from "@/features/dashboard/layouts/DashboardLayout";
 
 const EmployeeListPage = () => {
+  const navigate = useNavigate();
+
   const {
     employees,
     loading,
@@ -59,18 +67,49 @@ const EmployeeListPage = () => {
   return (
     <DashboardLayout>
       <Stack spacing={3}>
-        <Box>
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: 700 }}
-          >
-            Employees
-          </Typography>
+        <Stack
+          direction={{
+            xs: "column",
+            sm: "row",
+          }}
+          spacing={2}
+          sx={{
+            justifyContent: "space-between",
+            alignItems: {
+              xs: "stretch",
+              sm: "center",
+            },
+          }}
+        >
+          <Box>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 700,
+              }}
+            >
+              Employees
+            </Typography>
 
-          <Typography color="text.secondary">
-            View and manage employee records.
-          </Typography>
-        </Box>
+            <Typography color="text.secondary">
+              View and manage employee records.
+            </Typography>
+          </Box>
+
+          <Button
+            variant="contained"
+            startIcon={<Add />}
+            onClick={() => navigate("/employees/new")}
+            sx={{
+              alignSelf: {
+                xs: "stretch",
+                sm: "auto",
+              },
+            }}
+          >
+            Add Employee
+          </Button>
+        </Stack>
 
         <Paper sx={{ p: 3 }}>
           <Stack spacing={2}>

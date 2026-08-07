@@ -19,6 +19,7 @@ import DashboardPage from "@/features/dashboard/pages/DashboardPage";
 import LoginPage from "@/features/auth/pages/LoginPage";
 import UnauthorizedPage from "@/pages/common/UnauthorizedPage";
 import EmployeeListPage from "@/features/employee/pages/EmployeeListPage";
+import AddEmployeePage from "@/features/employee/pages/AddEmployeePage";
 
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
@@ -65,11 +66,21 @@ const AppRouter = () => {
             </ProtectedRoute>
           }
         />
+        
         <Route
           path="/employees/:id"
           element={
             <ProtectedRoute>
               <EmployeeDetailsPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/employees/new"
+          element={
+            <ProtectedRoute>
+              <AddEmployeePage />
             </ProtectedRoute>
           }
         />
