@@ -1,23 +1,26 @@
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { Add } from "@mui/icons-material";
 import {
-  Add,
-} from "@mui/icons-material";
-
-import {
+  Alert,
   Box,
   Button,
+  CircularProgress,
   Paper,
   Stack,
   Typography,
 } from "@mui/material";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import DashboardLayout from "@/features/dashboard/layouts/DashboardLayout";
 
 import EmployeeFilters from "../components/EmployeeFilters";
 import EmployeeSearch from "../components/EmployeeSearch";
 import EmployeeTable from "../components/EmployeeTable";
 import { useEmployees } from "../hooks/useEmployees";
-import DashboardLayout from "@/features/dashboard/layouts/DashboardLayout";
+import type {
+  EmployeeStatus,
+  EmploymentType,
+} from "../types/employee.types";
 
 const EmployeeListPage = () => {
   const navigate = useNavigate();
@@ -26,31 +29,51 @@ const EmployeeListPage = () => {
     employees,
     loading,
     error,
-    loadEmployees,
   } = useEmployees();
 
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("");
-  const [employmentType, setEmploymentType] = useState("");
+  const [department, setDepartment] = useState("");
+  const [status, setStatus] =
+    useState<EmployeeStatus | "">("");
+  const [employmentType, setEmploymentType] =
+    useState<EmploymentType | "">("");
 
-  useEffect(() => {
-    loadEmployees();
-  }, [loadEmployees]);
+  const departments = useMemo(() => {
+    return Array.from(
+      new Set(
+        employees
+          .map((employee) => employee.department)
+          .filter(Boolean),
+      ),
+    ).sort();
+  }, [employees]);
 
   const filteredEmployees = useMemo(() => {
+    const normalizedSearch =
+      search.trim().toLowerCase();
+
     return employees.filter((employee) => {
       const fullName =
-        `${employee.firstName} ${employee.lastName}`.toLowerCase();
+        `${employee.firstName} ${employee.lastName}`
+          .toLowerCase();
 
       const matchesSearch =
-        search === "" ||
-        fullName.includes(search.toLowerCase()) ||
+        normalizedSearch === "" ||
+        fullName.includes(normalizedSearch) ||
         employee.employeeId
           .toLowerCase()
-          .includes(search.toLowerCase());
+          .includes(normalizedSearch) ||
+        employee.email
+          .toLowerCase()
+          .includes(normalizedSearch);
+
+      const matchesDepartment =
+        department === "" ||
+        employee.department === department;
 
       const matchesStatus =
-        status === "" || employee.status === status;
+        status === "" ||
+        employee.status === status;
 
       const matchesEmploymentType =
         employmentType === "" ||
@@ -58,11 +81,30 @@ const EmployeeListPage = () => {
 
       return (
         matchesSearch &&
+        matchesDepartment &&
         matchesStatus &&
         matchesEmploymentType
       );
     });
-  }, [employees, search, status, employmentType]);
+  }, [
+    employees,
+    search,
+    department,
+    status,
+    employmentType,
+  ]);
+
+  const handleView = (employee: (typeof employees)[number]) => {
+    navigate(`/employees/${employee.id}`);
+  };
+
+  const handleEdit = (employee: (typeof employees)[number]) => {
+    navigate(`/employees/${employee.id}/edit`);
+  };
+
+  const handleDelete = (employee: (typeof employees)[number]) => {
+    console.log("Delete employee:", employee.id);
+  };
 
   return (
     <DashboardLayout>
@@ -99,7 +141,9 @@ const EmployeeListPage = () => {
           <Button
             variant="contained"
             startIcon={<Add />}
-            onClick={() => navigate("/employees/new")}
+            onClick={() =>
+              navigate("/employees/new")
+            }
             sx={{
               alignSelf: {
                 xs: "stretch",
@@ -111,7 +155,11 @@ const EmployeeListPage = () => {
           </Button>
         </Stack>
 
-        <Paper sx={{ p: 3 }}>
+        <Paper
+          sx={{
+            p: 3,
+          }}
+        >
           <Stack spacing={2}>
             <EmployeeSearch
               value={search}
@@ -119,19 +167,47 @@ const EmployeeListPage = () => {
             />
 
             <EmployeeFilters
+              department={department}
               status={status}
               employmentType={employmentType}
+              departments={departments}
+              onDepartmentChange={
+                setDepartment
+              }
               onStatusChange={setStatus}
-              onEmploymentTypeChange={setEmploymentType}
+              onEmploymentTypeChange={
+                setEmploymentType
+              }
             />
           </Stack>
         </Paper>
 
-        <EmployeeTable
-          employees={filteredEmployees}
-          loading={loading}
-          error={error}
-        />
+        {loading && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              py: 5,
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        )}
+
+        {error && !loading && (
+          <Alert severity="error">
+            {error}
+          </Alert>
+        )}
+
+        {!loading && !error && (
+          <EmployeeTable
+            employees={filteredEmployees}
+            onView={handleView}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        )}
       </Stack>
     </DashboardLayout>
   );

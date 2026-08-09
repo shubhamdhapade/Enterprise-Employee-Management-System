@@ -15,6 +15,7 @@ import { useState } from "react";
 import type { Employee } from "../types/employee.types";
 
 interface EmployeeFormProps {
+  initialEmployee?: Employee;
   onSubmit: (employee: Employee) => void | Promise<void>;
   onCancel: () => void;
 }
@@ -47,11 +48,39 @@ const initialFormData: EmployeeFormData = {
 };
 
 const EmployeeForm = ({
+  initialEmployee,
   onSubmit,
   onCancel,
 }: EmployeeFormProps) => {
+  const getInitialFormData = (): EmployeeFormData => {
+    if (!initialEmployee) {
+      return initialFormData;
+    }
+
+    return {
+      employeeId: initialEmployee.employeeId,
+      firstName: initialEmployee.firstName,
+      lastName: initialEmployee.lastName,
+      email: initialEmployee.email,
+      phone: initialEmployee.phone,
+      avatar: initialEmployee.avatar,
+      gender: initialEmployee.gender,
+      dateOfBirth: initialEmployee.dateOfBirth,
+      joiningDate: initialEmployee.joiningDate,
+      department: initialEmployee.department,
+      designation: initialEmployee.designation,
+      manager: initialEmployee.manager,
+      employmentType: initialEmployee.employmentType,
+      status: initialEmployee.status,
+      salary: initialEmployee.salary,
+      address: {
+        ...initialEmployee.address,
+      },
+    };
+  };
+
   const [formData, setFormData] =
-    useState<EmployeeFormData>(initialFormData);
+    useState<EmployeeFormData>(getInitialFormData);
 
   const [errors, setErrors] = useState<
     Record<string, string>
@@ -195,7 +224,7 @@ const EmployeeForm = ({
     }
 
     const employee: Employee = {
-      id: crypto.randomUUID(),
+      id: initialEmployee?.id ?? crypto.randomUUID(),
       ...formData,
     };
 
@@ -203,7 +232,7 @@ const EmployeeForm = ({
   };
 
   const handleReset = () => {
-    setFormData(initialFormData);
+    setFormData(getInitialFormData());
     setErrors({});
   };
 
@@ -214,6 +243,7 @@ const EmployeeForm = ({
       noValidate
     >
       <Stack spacing={3}>
+        {/* Basic Information */}
         <Card>
           <CardContent>
             <Stack spacing={3}>
@@ -323,6 +353,7 @@ const EmployeeForm = ({
           </CardContent>
         </Card>
 
+        {/* Personal Information */}
         <Card>
           <CardContent>
             <Stack spacing={3}>
@@ -396,6 +427,7 @@ const EmployeeForm = ({
           </CardContent>
         </Card>
 
+        {/* Employment Information */}
         <Card>
           <CardContent>
             <Stack spacing={3}>
@@ -588,6 +620,7 @@ const EmployeeForm = ({
           </CardContent>
         </Card>
 
+        {/* Address */}
         <Card>
           <CardContent>
             <Stack spacing={3}>
@@ -606,9 +639,7 @@ const EmployeeForm = ({
                 fullWidth
                 required
                 label="Address Line 1"
-                value={
-                  formData.address.addressLine1
-                }
+                value={formData.address.addressLine1}
                 onChange={(event) =>
                   updateAddressField(
                     "addressLine1",
@@ -691,9 +722,7 @@ const EmployeeForm = ({
                   fullWidth
                   required
                   label="Postal Code"
-                  value={
-                    formData.address.postalCode
-                  }
+                  value={formData.address.postalCode}
                   onChange={(event) =>
                     updateAddressField(
                       "postalCode",
@@ -712,6 +741,7 @@ const EmployeeForm = ({
           </CardContent>
         </Card>
 
+        {/* Actions */}
         <Stack
           direction={{
             xs: "column",
@@ -742,7 +772,9 @@ const EmployeeForm = ({
             type="submit"
             variant="contained"
           >
-            Save Employee
+            {initialEmployee
+              ? "Update Employee"
+              : "Save Employee"}
           </Button>
         </Stack>
       </Stack>

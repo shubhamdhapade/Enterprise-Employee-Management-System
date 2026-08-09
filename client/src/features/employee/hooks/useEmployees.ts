@@ -1,4 +1,8 @@
-import { useCallback, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 import { employeeService } from "../services/employeeService";
 import type { Employee } from "../types/employee.types";
@@ -17,11 +21,20 @@ export const useEmployees = () => {
 
       setEmployees(data);
     } catch {
+      setEmployees([]);
       setError("Failed to load employees.");
     } finally {
       setLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+    const load = async () => {
+      await loadEmployees();
+    };
+
+    void load();
+  }, [loadEmployees]);
 
   return {
     employees,
