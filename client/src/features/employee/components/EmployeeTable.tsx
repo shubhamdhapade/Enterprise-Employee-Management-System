@@ -1,78 +1,209 @@
 import {
-  Alert,
+  Avatar,
   Box,
-  CircularProgress,
-  Grid,
+  Chip,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography,
 } from "@mui/material";
 
 import type { Employee } from "../types/employee.types";
-import EmployeeCard from "./EmployeeCard";
+import { getEmployeeInitials } from "../utils/employeeHelpers";
 
 interface EmployeeTableProps {
   employees: Employee[];
-  loading: boolean;
-  error: string | null;
+  onView?: (employee: Employee) => void;
+  onEdit?: (employee: Employee) => void;
+  onDelete?: (employee: Employee) => void;
 }
+
+const getStatusColor = (
+  status: Employee["status"]
+): "success" | "default" | "warning" => {
+  switch (status) {
+    case "Active":
+      return "success";
+
+    case "On Leave":
+      return "warning";
+
+    case "Inactive":
+    default:
+      return "default";
+  }
+};
 
 const EmployeeTable = ({
   employees,
-  loading,
-  error,
+  onView,
+  onEdit,
+  onDelete,
 }: EmployeeTableProps) => {
-  if (loading) {
-    return (
-      <Box
-        sx={{ 
-            justifyContent: "center", 
-            alignItems: "center", 
-            minHeight: 300,
-            display: "flex"
-         }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return <Alert severity="error">{error}</Alert>;
-  }
-
-  if (employees.length === 0) {
-    return (
-      <Box 
-        sx={{
-            textAlign: "center", 
-            py: 8
-        }}>
-        <Typography variant="h6" color="text.secondary">
-          No employees found.
-        </Typography>
-
-        <Typography variant="body2" color="text.secondary">
-          Employee records will appear here once available.
-        </Typography>
-      </Box>
-    );
-  }
-
   return (
-    <Grid container spacing={3}>
-      {employees.map((employee) => (
-        <Grid
-          key={employee.id}
-          size={{
-            xs: 12,
-            sm: 6,
-            lg: 4,
-            xl: 3,
-          }}
-        >
-          <EmployeeCard employee={employee} />
-        </Grid>
-      ))}
-    </Grid>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Employee</TableCell>
+            <TableCell>Employee ID</TableCell>
+            <TableCell>Department</TableCell>
+            <TableCell>Designation</TableCell>
+            <TableCell>Employment Type</TableCell>
+            <TableCell>Status</TableCell>
+            <TableCell align="right">Actions</TableCell>
+          </TableRow>
+        </TableHead>
+
+        <TableBody>
+          {employees.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={7}>
+                <Box
+                  sx={{
+                    py: 5,
+                    textAlign: "center",
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    color="text.secondary"
+                  >
+                    No employees found.
+                  </Typography>
+                </Box>
+              </TableCell>
+            </TableRow>
+          ) : (
+            employees.map((employee) => (
+              <TableRow
+                key={employee.id}
+                hover
+              >
+                <TableCell>
+                  <Stack
+                    direction="row"
+                    spacing={1.5}
+                    sx={{ alignItems: "center" }}
+                  >
+                    <Avatar
+                      src={employee.avatar || undefined}
+                      alt={`${employee.firstName} ${employee.lastName}`}
+                    >
+                      {getEmployeeInitials(employee)}
+                    </Avatar>
+
+                    <Box>
+                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                        {employee.firstName} {employee.lastName}
+                      </Typography>
+
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                      >
+                        {employee.email}
+                      </Typography>
+                    </Box>
+                  </Stack>
+                </TableCell>
+
+                <TableCell>
+                  {employee.employeeId}
+                </TableCell>
+
+                <TableCell>
+                  {employee.department}
+                </TableCell>
+
+                <TableCell>
+                  {employee.designation}
+                </TableCell>
+
+                <TableCell>
+                  {employee.employmentType}
+                </TableCell>
+
+                <TableCell>
+                  <Chip
+                    label={employee.status}
+                    color={getStatusColor(employee.status)}
+                    size="small"
+                  />
+                </TableCell>
+
+                <TableCell align="right">
+                  <Stack
+                    direction="row"
+                    spacing={1}
+                    sx={{ justifyContent: "flex-end" }}
+                  >
+                    {onView && (
+                      <Typography
+                        component="button"
+                        variant="body2"
+                        onClick={() => onView(employee)}
+                        sx={{
+                          border: 0,
+                          background: "none",
+                          cursor: "pointer",
+                          color: "primary.main",
+                          font: "inherit",
+                          p: 0,
+                        }}
+                      >
+                        View
+                      </Typography>
+                    )}
+
+                    {onEdit && (
+                      <Typography
+                        component="button"
+                        variant="body2"
+                        onClick={() => onEdit(employee)}
+                        sx={{
+                          border: 0,
+                          background: "none",
+                          cursor: "pointer",
+                          color: "primary.main",
+                          font: "inherit",
+                          p: 0,
+                        }}
+                      >
+                        Edit
+                      </Typography>
+                    )}
+
+                    {onDelete && (
+                      <Typography
+                        component="button"
+                        variant="body2"
+                        onClick={() => onDelete(employee)}
+                        sx={{
+                          border: 0,
+                          background: "none",
+                          cursor: "pointer",
+                          color: "error.main",
+                          font: "inherit",
+                          p: 0,
+                        }}
+                      >
+                        Delete
+                      </Typography>
+                    )}
+                  </Stack>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 

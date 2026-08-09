@@ -10,65 +10,112 @@ import {
   EMPLOYEE_STATUS,
   EMPLOYMENT_TYPES,
 } from "../constants/employeeStatus";
+import type {
+  EmployeeStatus,
+  EmploymentType,
+} from "../types/employee.types";
 
 interface EmployeeFiltersProps {
-  status: string;
-  employmentType: string;
-  onStatusChange: (value: string) => void;
-  onEmploymentTypeChange: (value: string) => void;
+  department: string;
+  status: EmployeeStatus | "";
+  employmentType: EmploymentType | "";
+  departments: string[];
+  onDepartmentChange: (value: string) => void;
+  onStatusChange: (value: EmployeeStatus | "") => void;
+  onEmploymentTypeChange: (value: EmploymentType | "") => void;
 }
 
 const EmployeeFilters = ({
+  department,
   status,
   employmentType,
+  departments,
+  onDepartmentChange,
   onStatusChange,
   onEmploymentTypeChange,
 }: EmployeeFiltersProps) => {
   return (
     <Stack
-      direction={{ xs: "column", md: "row" }}
+      direction={{
+        xs: "column",
+        sm: "row",
+      }}
       spacing={2}
+      sx={{ width: "100%" }}
     >
-      <FormControl size="small" sx={{ minWidth: 180 }}>
-        <InputLabel>Status</InputLabel>
+      <FormControl fullWidth size="small">
+        <InputLabel id="employee-department-label">
+          Department
+        </InputLabel>
 
         <Select
-          value={status}
-          label="Status"
+          labelId="employee-department-label"
+          value={department}
+          label="Department"
           onChange={(event) =>
-            onStatusChange(event.target.value)
+            onDepartmentChange(event.target.value)
           }
         >
-          <MenuItem value="">All</MenuItem>
+          <MenuItem value="">
+            All Departments
+          </MenuItem>
 
-          {EMPLOYEE_STATUS.map((item) => (
-            <MenuItem
-              key={item}
-              value={item}
-            >
+          {departments.map((item) => (
+            <MenuItem key={item} value={item}>
               {item}
             </MenuItem>
           ))}
         </Select>
       </FormControl>
 
-      <FormControl size="small" sx={{ minWidth: 200 }}>
-        <InputLabel>Employment Type</InputLabel>
+      <FormControl fullWidth size="small">
+        <InputLabel id="employee-status-label">
+          Status
+        </InputLabel>
 
         <Select
+          labelId="employee-status-label"
+          value={status}
+          label="Status"
+          onChange={(event) =>
+            onStatusChange(
+              event.target.value as EmployeeStatus | ""
+            )
+          }
+        >
+          <MenuItem value="">
+            All Statuses
+          </MenuItem>
+
+          {EMPLOYEE_STATUS.map((item) => (
+            <MenuItem key={item} value={item}>
+              {item}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      <FormControl fullWidth size="small">
+        <InputLabel id="employee-employment-type-label">
+          Employment Type
+        </InputLabel>
+
+        <Select
+          labelId="employee-employment-type-label"
           value={employmentType}
           label="Employment Type"
           onChange={(event) =>
-            onEmploymentTypeChange(event.target.value)
+            onEmploymentTypeChange(
+              event.target.value as EmploymentType | ""
+            )
           }
         >
-          <MenuItem value="">All</MenuItem>
+          <MenuItem value="">
+            All Types
+          </MenuItem>
 
           {EMPLOYMENT_TYPES.map((item) => (
-            <MenuItem
-              key={item}
-              value={item}
-            >
+            <MenuItem key={item} value={item}>
               {item}
             </MenuItem>
           ))}

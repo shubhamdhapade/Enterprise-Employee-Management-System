@@ -4,7 +4,10 @@ import { employeeService } from "../services/employeeService";
 import type { Employee } from "../types/employee.types";
 
 export const useEmployee = () => {
-  const [employee, setEmployee] = useState<Employee | null>(null);
+  const [employee, setEmployee] = useState<Employee | null>(
+    null,
+  );
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

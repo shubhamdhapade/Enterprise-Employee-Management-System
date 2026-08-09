@@ -20,10 +20,11 @@ import LoginPage from "@/features/auth/pages/LoginPage";
 import UnauthorizedPage from "@/pages/common/UnauthorizedPage";
 import EmployeeListPage from "@/features/employee/pages/EmployeeListPage";
 import AddEmployeePage from "@/features/employee/pages/AddEmployeePage";
+import EditEmployeePage from "@/features/employee/pages/EditEmployeePage";
+import EmployeeDetailsPage from "@/features/employee/components/EmployeeDetailsPage";
 
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
-import EmployeeDetailsPage from "@/features/employee/components/EmployeeDetailsPage";
 
 const AppRouter = () => {
   return (
@@ -66,7 +67,7 @@ const AppRouter = () => {
             </ProtectedRoute>
           }
         />
-        
+
         <Route
           path="/employees/:id"
           element={
@@ -81,6 +82,15 @@ const AppRouter = () => {
           element={
             <ProtectedRoute>
               <AddEmployeePage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/employees/:id/edit"
+          element={
+            <ProtectedRoute>
+              <EditEmployeePage />
             </ProtectedRoute>
           }
         />
