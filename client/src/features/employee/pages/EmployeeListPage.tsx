@@ -17,6 +17,7 @@ import EmployeeFilters from "../components/EmployeeFilters";
 import EmployeeSearch from "../components/EmployeeSearch";
 import EmployeeTable from "../components/EmployeeTable";
 import { useEmployees } from "../hooks/useEmployees";
+import { employeeService } from "../services/employeeService";
 import type {
   EmployeeStatus,
   EmploymentType,
@@ -29,6 +30,7 @@ const EmployeeListPage = () => {
     employees,
     loading,
     error,
+    loadEmployees,
   } = useEmployees();
 
   const [search, setSearch] = useState("");
@@ -37,6 +39,12 @@ const EmployeeListPage = () => {
     useState<EmployeeStatus | "">("");
   const [employmentType, setEmploymentType] =
     useState<EmploymentType | "">("");
+
+  const [deletingId, setDeletingId] =
+    useState<string | null>(null);
+
+  const [deleteError, setDeleteError] =
+    useState<string | null>(null);
 
   const departments = useMemo(() => {
     return Array.from(
@@ -94,16 +102,53 @@ const EmployeeListPage = () => {
     employmentType,
   ]);
 
-  const handleView = (employee: (typeof employees)[number]) => {
+  const handleView = (
+    employee: (typeof employees)[number],
+  ) => {
     navigate(`/employees/${employee.id}`);
   };
 
-  const handleEdit = (employee: (typeof employees)[number]) => {
+  const handleEdit = (
+    employee: (typeof employees)[number],
+  ) => {
     navigate(`/employees/${employee.id}/edit`);
   };
 
-  const handleDelete = (employee: (typeof employees)[number]) => {
-    console.log("Delete employee:", employee.id);
+  const handleDelete = async (
+    employee: (typeof employees)[number],
+  ) => {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete ${employee.firstName} ${employee.lastName}?`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setDeletingId(employee.id);
+      setDeleteError(null);
+
+      const deleted =
+        await employeeService.deleteEmployee(
+          employee.id,
+        );
+
+      if (!deleted) {
+        setDeleteError(
+          "Employee could not be deleted.",
+        );
+        return;
+      }
+
+      await loadEmployees();
+    } catch {
+      setDeleteError(
+        "Failed to delete employee.",
+      );
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   return (
@@ -182,6 +227,15 @@ const EmployeeListPage = () => {
           </Stack>
         </Paper>
 
+        {deleteError && (
+          <Alert
+            severity="error"
+            onClose={() => setDeleteError(null)}
+          >
+            {deleteError}
+          </Alert>
+        )}
+
         {loading && (
           <Box
             sx={{
@@ -207,6 +261,16 @@ const EmployeeListPage = () => {
             onEdit={handleEdit}
             onDelete={handleDelete}
           />
+        )}
+
+        {deletingId && (
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ textAlign: "right" }}
+          >
+            Deleting employee...
+          </Typography>
         )}
       </Stack>
     </DashboardLayout>
